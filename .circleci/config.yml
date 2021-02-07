@@ -39,6 +39,7 @@ jobs:
     steps:
       - checkout
       - run: cd frontend
+      - run: pwd && ls -lah
       - restore_cache:
           keys: [frontend-build]
       - run:
@@ -54,7 +55,7 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - run: cd frontend
+      - run: cd backend
       - restore_cache:
           keys: [backend-build]
       - run:
