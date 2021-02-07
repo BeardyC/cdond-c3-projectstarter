@@ -1,4 +1,7 @@
 version: 2.1
+node-base: &node-base
+  docker:
+    - image: circleci/node:13.8.0
 
 commands:
   destroy-environment:
@@ -34,15 +37,11 @@ commands:
             
 jobs:
   build-frontend:
-    docker:
-      - image: circleci/node:13.8.0
+    <<: *node-base
     steps:
       - checkout
-      - run: cd ./frontend/
-      - run: pwd && ls -lah
       - restore_cache:
           keys: [frontend-build]
-      - run: pwd && ls -lah
       - run:
           name: Build front-end
           command: |
@@ -52,36 +51,33 @@ jobs:
           key: frontend-build
 
   build-backend:
-    docker:
-      - image: circleci/node:13.8.0
+  
+    <<: *node-base
     steps:
       - checkout
-      - run: cd backend
       - restore_cache:
           keys: [backend-build]
       - run:
           name: Back-end build
           command: |
-            npm install && npm run lint 
+            cd backend && npm install && npm run lint 
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
 
-#   test-frontend:
-#     docker:
-#       # Docker image here
-#     steps:
-#       # Checkout code from git
-#       # Restore from cache
-#       # Your job code here
+  # test-frontend:
+  #   <<: *node-base
+  #   steps:
+  #     # Checkout code from git
+  #     # Restore from cache
+  #     # Your job code here
                 
-#   test-backend:
-#     docker:
-#       # Docker image here
-#     steps:
-#       # Checkout code from git
-#       # Restore from cache
-#       # Your job code here
+  # test-backend:
+  #   <<: *node-base
+  #   steps:
+  #     # Checkout code from git
+  #     # Restore from cache
+  #     # Your job code here
             
 #   scan-frontend:
 #     docker:
