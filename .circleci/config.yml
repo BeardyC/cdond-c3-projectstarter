@@ -74,7 +74,7 @@ jobs:
       - run:
           name: Test Front-end
           command: |
-            cd frontend && npm run test
+            cd frontend && npm i && npm run test
                 
   test-backend:
     <<: *node-base
@@ -85,23 +85,29 @@ jobs:
       - run:
           name: Test Back-End
           command: |
-            cd backend && npm run test
+            cd backend && npm i && npm run test
             
-#   scan-frontend:
-#     docker:
-#       # Docker image here
-#     steps:
-#       # Checkout code from git
-#       # Restore from cache
-#       # Your job code here
+  scan-frontend:
+    <<: *node-base
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Front-end audit packages
+          command: |
+            cd frontend && npm audit --audit-level=critical
 
-#   scan-backend:
-#     docker:
-#       # Docker image here
-#     steps:
-#       # Checkout code from git
-#       # Restore from cache
-#       # Your job code here
+  scan-backend:
+    <<: *node-base
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: Back-end audit packages
+          command: |
+            cd backend && npm audit --audit-level=critical
 
 #   deploy-infrastructure:
 #     docker:
@@ -278,10 +284,10 @@ workflows:
           requires: [build-frontend]
       - test-backend:
           requires: [build-backend]
-      # - scan-backend:
-      #     requires: [build-backend]
-      # - scan-frontend:
-      #     requires: [build-frontend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
       # - deploy-infrastructure:
       #     requires: [scan-frontend, scan-backend]
       #     filters:
