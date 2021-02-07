@@ -38,7 +38,7 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - run: pwd && ls -lah
+      - run: cd frontend
       - restore_cache:
           keys: [frontend-build]
       - run:
@@ -54,13 +54,13 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       - checkout
+      - run: cd frontend
       - restore_cache:
           keys: [backend-build]
       - run:
           name: Back-end build
           command: |
-             # Your code here
-             exit 1
+            npm install && npm run lint 
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
