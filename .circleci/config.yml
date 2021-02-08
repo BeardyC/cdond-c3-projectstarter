@@ -178,7 +178,7 @@ jobs:
       - run:
           name: Configure server
           command: |
-            cat << EOF > ~/project/backend/.env
+            cat \<< EOF > ~/project/backend/.env
             TYPEORM_CONNECTION=postgres
             TYPEORM_MIGRATIONS_DIR=./src/migrations
             TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts
