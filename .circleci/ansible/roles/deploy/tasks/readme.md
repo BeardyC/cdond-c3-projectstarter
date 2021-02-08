@@ -1,1 +1,6 @@
-## Deployment playbook goes here.
+---
+- name: Update and upgrade apt packages
+  become: true
+  apt:
+    upgrade: yes
+    update_cache: yes

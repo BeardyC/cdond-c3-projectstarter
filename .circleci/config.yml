@@ -179,8 +179,6 @@ jobs:
           name: Configure server
           command: |
             cat << EOF > ~/project/backend/.env
-            NODE_ENV=local
-            VERSION=1
             TYPEORM_CONNECTION=postgres
             TYPEORM_MIGRATIONS_DIR=./src/migrations
             TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts
@@ -192,7 +190,7 @@ jobs:
             TYPEORM_DATABASE=$TYPEORM_DATABASE
             EOF
             cat ~/project/backend/.env
-            ansble-playbook -i inventory.txt configure-server.yml
+            ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment:
           workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"  
 
@@ -327,8 +325,8 @@ workflows:
           filters:
             branches:
               only: [master]
-      # - configure-infrastructure:
-      #     requires: [deploy-infrastructure]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
       # - run-migrations:
       #     requires: [configure-infrastructure]
       # - deploy-frontend:
