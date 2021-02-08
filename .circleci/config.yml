@@ -115,6 +115,7 @@ jobs:
     <<: *aws-base
     steps:
       - checkout
+      - run: yum install -y tar gzip
       - run:
           name: Ensure back-end infrastructure exists
           command: |
@@ -134,7 +135,7 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-           aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=back-end" --output text >> inventory.txt
+           aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=back-end-${CIRCLE_WORKFLOW_ID:0:7}" --output text >> inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
