@@ -202,7 +202,7 @@ jobs:
       - checkout
       - run:
           name: Install deps
-          command: sudo apt-get update && apt-get install -y awscli
+          command: sudo apt-get update && sudo apt-get install -y awscli
       - run:
           name: Run migrations
           command: |
