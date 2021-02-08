@@ -180,10 +180,10 @@ jobs:
           name: Configure server
           command: |
             cat \<< EOF > ~/project/backend/.env
-            TYPEORM_CONNECTION=postgres
-            TYPEORM_MIGRATIONS_DIR=./src/migrations
-            TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts
-            TYPEORM_MIGRATIONS=./src/migrations/*.ts
+            TYPEORM_CONNECTION=$TYPEORM_CONNECTION
+            TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR
+            TYPEORM_ENTITIES=$TYPEORM_ENTITIES
+            TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS
             TYPEORM_HOST=$TYPEORM_HOST
             TYPEORM_PORT=$TYPEORM_PORT
             TYPEORM_USERNAME=$TYPEORM_USERNAME
