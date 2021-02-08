@@ -1,0 +1,19 @@
+---
+- name: "install node"
+  become: yes
+  apt:
+    name: ["nodejs", "npm"]
+    state: latest
+    update_cache: yes
+
+- name: "install pm2"
+  become: yes
+  npm:
+    name: "pm2"
+    global: yes
+    state: present
+    production: yes
+
+- name: "pwd"
+  become: yes
+  shell: pwd && ls -lah
