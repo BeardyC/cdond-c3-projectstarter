@@ -29,7 +29,7 @@ Resources:
       SecurityGroups:
         - Ref: InstanceSecurityGroup
       KeyName: ansibleKey 
-      ImageId: ami-00831fc7c1e3ddc60
+      ImageId: ami-0ff4c8fb495a5a50d
       Tags:
         - Key: Name
           Value: !Sub backend-${ID}
