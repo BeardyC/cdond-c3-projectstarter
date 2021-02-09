@@ -299,7 +299,9 @@ jobs:
             EOF
             cat ~/project/backend/.env
             cat .circleci/ansible/inventory.txt
-            tar -zcvf backend.tar.gz ~/project/backend
+            ls -lah
+            tar -zcvf backend.tar.gz backend
+            ls -lah
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       # - destroy-environment:
       #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
