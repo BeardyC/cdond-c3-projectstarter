@@ -12,6 +12,7 @@
     dest: /home/ubuntu
 
 - name: "Npm I - Install dependencies"
+  become: true
   command: npm install
   args:
     chdir: /home/ubuntu/backend
