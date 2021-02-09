@@ -12,9 +12,9 @@
     dest: /home/ubuntu
 
 - name: "Npm I - Install dependencies"
-  become: true
-  npm:
-    path: /home/ubuntu/backend
+  command: npm install
+  args:
+    chdir: /home/ubuntu/backend
 
 - name: "Run Migration"
   become: true
