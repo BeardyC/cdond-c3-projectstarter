@@ -248,7 +248,7 @@ jobs:
             curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
             yum -y install nodejs
             yum -y install tar gzip
-            nvm install node && cd frontend && npm install
+            cd frontend && npm install
       - run:
           name: Get backend url
           command: |
