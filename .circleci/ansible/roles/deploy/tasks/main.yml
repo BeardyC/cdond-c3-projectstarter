@@ -4,7 +4,7 @@
   apt:
     upgrade: "yes"
 
-- name: "Copy backend tar.gz file and unzipping it"
+- name: "Copy backend tar.gz"
   become: yes
   unarchive:
     src: ~/project/backend.tar.gz
@@ -15,7 +15,7 @@
   npm:
     path: /home/ubuntu/backend
 
-- name: "run migration"
+- name: "migration"
   become: yes
   shell: npm run migrations
   args:
@@ -32,48 +32,3 @@
   shell: pm2 start --name "backend" npm -- start
   args:
     chdir: /home/ubuntu/backend
-# ---
-# - name: "upgrade packages"
-#   become: yes
-#   apt:
-#     upgrade: "yes"
-
-
-# - name: "Copy backend tar.gz file and unzipping it"
-#   become: yes
-#   unarchive:
-#     src: ~/project/backend.tar.gz
-#     dest: /home/ubuntu
-
-# - name: "run migration"
-#   become: yes
-#   shell: npm install -g npm@latest
-
-# - name: "installing dependencies"
-#   become: yes
-#   npm:
-#     path: /home/ubuntu/backend
-
-# - name: "NPM install"
-#   become: yes
-#   command: npm install
-#   args:
-#     chdir: /home/ubuntu/backend
-
-# # - name: "Npm I - Install dependencies"
-# #   become: true
-# #   command: npm install
-# #   args:
-# #     chdir: /home/ubuntu/backend
-
-# - name: "Run Migration"
-#   become: true
-#   shell: npm run migrations
-#   args:
-#     chdir: /home/ubuntu/backend
-
-# - name: "Start pm2"
-#   become: true
-#   shell: pm2 start --name "backend" npm -- start
-#   args:
-#     chdir: /home/ubuntu/backend
