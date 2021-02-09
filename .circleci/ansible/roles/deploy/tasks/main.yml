@@ -20,9 +20,8 @@
   npm:
     path: /home/ubuntu/backend
 
-- name: "run migration"
-  become: yes
-  shell: npm run migrations
+- name: "NPM install"
+  command: npm install
   args:
     chdir: /home/ubuntu/backend
 
