@@ -11,11 +11,21 @@
     src: ~/project/backend.tar.gz
     dest: /home/ubuntu
 
-- name: "Npm I - Install dependencies"
+- name: "Update npm"
   become: true
+  shell: |
+    cd /home/ubuntu/backend
+    npm install -g npm@latest
+- name: "NPM install"
   command: npm install
   args:
     chdir: /home/ubuntu/backend
+
+# - name: "Npm I - Install dependencies"
+#   become: true
+#   command: npm install
+#   args:
+#     chdir: /home/ubuntu/backend
 
 - name: "Run Migration"
   become: true
