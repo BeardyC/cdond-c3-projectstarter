@@ -22,23 +22,25 @@ commands:
           command: |
             aws cloudformation delete-stack --stack-name back-end-<< parameters.workflow_id >>
             aws cloudformation delete-stack --stack-name front-end-<< parameters.workflow_id >>
+            aws s3 rm s3://udapeople-<< parameters.workflow_id >> --recursive
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
     parameters:
-      # Add parameter here     
+      workflow_id:
+        type: string     
     steps:
       - run:
           name: Revert migrations
-          # Add when this will run
+          when: on_fail
           command: |
-            # Curl command here to see if there was a successful migration associated with the workflow id, store result in SUCCESS variable
-            SUCCESS = 1
+            SSUCCESS=$(curl -H "token:  << parameters.workflow_id >>" \
+              --request GET https://api.memstash.io/values/migration_<< parameters.workflow_id >>)
             if(( $SUCCESS==1 )); 
             then
-            #  cd ~/project/backend
-            #  npm install
-            #  Add revert code here. You can find this in the Getting Started section.
+             cd ~/project/backend
+             npm install
+             npm migrations:revert
               exit 1
             fi
             
@@ -160,7 +162,9 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}    
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID}    
 
   configure-infrastructure:
     <<: *ansible-base
@@ -194,7 +198,9 @@ jobs:
             cat .circleci/ansible/inventory.txt
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
       - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"  
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID}  
 
   run-migrations:
     <<: *node-base
@@ -225,7 +231,9 @@ jobs:
                 --data "0" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}
             fi
       - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"     
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID}     
 
   deploy-frontend:
     <<: *aws-base
@@ -253,7 +261,9 @@ jobs:
           command: |
             aws s3 cp ./frontend/dist s3://udapeople-"${CIRCLE_WORKFLOW_ID}" --recursive
       - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"      
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID}       
                     
   deploy-backend:
     <<: *ansible-base
@@ -288,7 +298,9 @@ jobs:
             tar -zcvf backend.tar.gz ~/project/backend
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
       - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"  
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID}  
 
   smoke-test:
     docker:
@@ -321,7 +333,9 @@ jobs:
               return 1
             fi
       - destroy-environment:
-          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"  
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID}   
 
 #   cloudfront-update:
 #     docker:
