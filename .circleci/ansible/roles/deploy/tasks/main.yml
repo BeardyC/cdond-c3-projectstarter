@@ -21,6 +21,7 @@
     path: /home/ubuntu/backend
 
 - name: "NPM install"
+  become: yes
   command: npm install
   args:
     chdir: /home/ubuntu/backend
