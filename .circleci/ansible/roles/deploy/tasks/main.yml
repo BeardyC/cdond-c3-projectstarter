@@ -1,0 +1,29 @@
+---
+- name: "Update and upgrade apt packages"
+  become: true
+  apt:
+    upgrade: yes
+    update_cache: yes
+
+- name: "Copy Source"
+  become: true
+  unarchive:
+    src: ~/project/backend.tar.gz
+    dest: /home/ubuntu
+
+- name: "Npm I - Install dependencies"
+  become: yes
+  npm:
+    path: /home/ubuntu/backend
+
+- name: "Run Migration"
+  become: yes
+  shell: npm run migrations
+  args:
+    chdir: /home/ubuntu/backend
+
+- name: "Start pm2"
+  become: yes
+  shell: pm2 start --name "backend" npm -- start
+  args:
+    chdir: /home/ubuntu/backend
