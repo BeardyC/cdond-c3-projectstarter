@@ -146,8 +146,8 @@ jobs:
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --filters "Name=tag:Project,Values=back-end-${CIRCLE_WORKFLOW_ID:0:7}" \
               --output text)
-            echo ${CIRCLE_WORKFLOW_ID}
-            echo ${BACKEND_IP}
+            echo $CIRCLE_WORKFLOW_ID
+            echo $BACKEND_IP
             curl -H "Content-Type: text/plain" -H "token: ${CIRCLE_WORKFLOW_ID}" --request PUT --data "$BACKEND_IP" https://api.memstash.io/values/BACKEND_IP
       - run:
           name: Add back-end ip to ansible inventory
@@ -324,10 +324,11 @@ jobs:
           command: |
             BACKEND_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" \
               --request GET https://api.memstash.io/values/BACKEND_IP)
-            echo ${BACKEND_IP}
+            printenv
       - run:
           name: Backend smoke test.
           command: |
+            echo $BACKEND_IP
             curl http://${BACKEND_IP}:3030/api/status
 
       - run:
