@@ -245,8 +245,9 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.34.0/install.sh | bash
-            . ~/.nvm/nvm.sh
+            curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
+            yum -y install nodejs
+            yum -y install tar gzip
             nvm install node && cd frontend && npm install
       - run:
           name: Get backend url
@@ -300,10 +301,10 @@ jobs:
             cat .circleci/ansible/inventory.txt
             tar -zcvf backend.tar.gz ~/project/backend
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml
-      - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
-      - revert-migrations:
-          workflow_id: ${CIRCLE_WORKFLOW_ID}  
+      # - destroy-environment:
+      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
+      # - revert-migrations:
+      #     workflow_id: ${CIRCLE_WORKFLOW_ID}  
 
   smoke-test:
     docker:
