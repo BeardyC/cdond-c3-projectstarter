@@ -361,7 +361,7 @@ jobs:
       - revert-migrations:
           workflow_id: ${CIRCLE_WORKFLOW_ID} 
 
-cleanup:
+  cleanup:
     <<: *aws-base
     steps:
       - checkout
