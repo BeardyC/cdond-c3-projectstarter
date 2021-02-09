@@ -4,11 +4,16 @@
   apt:
     upgrade: "yes"
 
+
 - name: "Copy backend tar.gz file and unzipping it"
   become: yes
   unarchive:
     src: ~/project/backend.tar.gz
     dest: /home/ubuntu
+
+- name: "run migration"
+  become: yes
+  shell: npm install -g npm@latest
 
 - name: "installing dependencies"
   become: yes
@@ -20,7 +25,6 @@
   shell: npm run migrations
   args:
     chdir: /home/ubuntu/backend
-
 
 # - name: "Npm I - Install dependencies"
 #   become: true
