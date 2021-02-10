@@ -55,7 +55,6 @@ jobs:
       - run:
           name: Build front-end
           command: |
-            return 1
             cd frontend && npm install && npm build
       - save_cache:
           paths: [frontend/node_modules]
