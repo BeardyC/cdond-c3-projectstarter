@@ -184,18 +184,6 @@ jobs:
       - run:
           name: Configure server
           command: |
-            cat \<< EOF > ~/project/backend/.env
-            TYPEORM_CONNECTION=$TYPEORM_CONNECTION
-            TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR
-            TYPEORM_ENTITIES=$TYPEORM_ENTITIES
-            TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS
-            TYPEORM_HOST=$TYPEORM_HOST
-            TYPEORM_PORT=$TYPEORM_PORT
-            TYPEORM_USERNAME=$TYPEORM_USERNAME
-            TYPEORM_PASSWORD=$TYPEORM_PASSWORD
-            TYPEORM_DATABASE=$TYPEORM_DATABASE
-            EOF
-            cat ~/project/backend/.env
             cat .circleci/ansible/inventory.txt
             ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml
       - destroy-environment:
@@ -333,7 +321,7 @@ jobs:
             URL="http://udapeople-${CIRCLE_WORKFLOW_ID:0:7}.s3-website-us-west-2.amazonaws.com"
             if curl -s ${URL} | grep "Welcome"
             then
-              return 1
+              return 0
             else
               return 1
             fi
